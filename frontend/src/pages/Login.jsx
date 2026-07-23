@@ -27,8 +27,8 @@ export default function Login() {
     <div className="min-h-[85vh] flex items-center justify-center bg-orange-50 mandala-pattern px-4 py-12">
       <div className="card w-full max-w-md p-8 animate-slide-up">
         <div className="text-center mb-6">
-          <div className="text-5xl mb-2">🐘</div>
-          <h1 className="font-display text-2xl font-bold text-maroon-700">Welcome to Patemala Ganesh Mandal</h1>
+          <div className="text-5xl mb-2">🌺</div>
+          <h1 className="font-display text-2xl font-bold text-maroon-700">Welcome to Navtarun Mitra Mandal</h1>
           <p className="text-gray-500 text-sm mt-1">Login to your Mandal account</p>
           <button type="button" onClick={() => navigate("/")} className="mt-3 text-xs text-orange-600 underline hover:text-orange-700">
             Skip and browse app

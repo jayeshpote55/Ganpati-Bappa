@@ -20,8 +20,16 @@ import {
 const eventSchedule = [
   { time: "10:00 AM", title: "Murti Sthapana", label: "Day 1" },
   { time: "07:00 PM", title: "Bhajan Sandhya", label: "Day 2" },
+  { time: "05:00 PM", title: "Cultural Program", label: "Day 3" },
+  { time: "05:00 PM", title: "Cultural Program", label: "Day 4" },
   { time: "05:00 PM", title: "Cultural Program", label: "Day 5" },
-  { time: "05:00 PM", title: "Visarjan Procession", label: "Day 10" },
+  { time: "05:00 PM", title: "Cultural Program", label: "Day 6" },
+  { time: "05:00 PM", title: "Cultural Program", label: "Day 7" },
+  { time: "05:00 PM", title: "Cultural Program", label: "Day 8" },
+  { time: "05:00 PM", title: "Cultural Program", label: "Day 9" },
+  { time: "05:00 PM", title: "Cultural Program", label: "Day 10" },
+  { time: "05:00 PM", title: "Cultural Program", label: "Day 11" },
+  { time: "05:00 PM", title: "Visarjan Procession", label: "Day 12" },
 ];
 
 const volunteerRoles = [
@@ -36,8 +44,8 @@ const volunteerRoles = [
 ];
 
 const pollingItems = [
-  { question: "Tomorrow meeting timing?", options: ["6 PM", "7 PM", "8 PM"] },
-  { question: "Aarti playlist for today?", options: ["Old bhajans", "New releases", "Mix"] },
+  { question: "Tomorrow meeting timing?", options: ["7 PM", "8 PM", "9 PM"] },
+  { question: "Aarti playlist for today?", options: ["Bappa", "New releases", "Mix"] },
 ];
 
 const sponsorData = [
@@ -131,8 +139,8 @@ export default function Home() {
             <div className="glass-card p-6 shadow-[0_40px_120px_rgba(225,98,9,0.18)] border-white/30">
               <div className="flex items-center justify-between gap-4 mb-6">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.3em] text-orange-200/90">Countdown</p>
-                  <h2 className="text-3xl font-bold text-white">Ganesh Chaturthi</h2>
+                  <p className="text-sm text-orange-700 uppercase tracking-[0.2em] mb-2">Countdown</p>
+                  <h2 className="text-sm text-orange-700 uppercase tracking-[0.2em] mb-2">Ganesh Chaturthi</h2>
                 </div>
                 <div className="inline-flex rounded-3xl bg-orange-500/15 px-4 py-2 text-orange-100 text-sm font-medium">
                   {nextChaturthi.getFullYear()}
@@ -149,11 +157,13 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="rounded-3xl bg-orange-100/90 p-4">
                   <p className="text-sm text-orange-700 uppercase tracking-[0.2em] mb-2">Latest announcement</p>
-                  <p className="font-semibold text-slate-800">Bhajan rehearsal moved to 5 PM today in hall 1.</p>
+                  <p className="font-semibold text-slate-800">सर्वांनी सकाळी नेमके १०:०० वाजता मंदिरापाशी उपस्थित राहावे. आपल्याला बाप्पा आणण्यासाठी प्रस्थान करायचे आहे. कृपया वेळेचे पालन करावे.
+
+गणपती बाप्पा मोरया! 🙏</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3 text-sm text-white">
                   <div className="rounded-3xl bg-white/10 p-4">
-                    <p className="font-semibold">85+</p>
+                    <p className="font-semibold">10+</p>
                     <p className="text-slate-200/80">Active Volunteers</p>
                   </div>
                   <div className="rounded-3xl bg-white/10 p-4">
@@ -399,29 +409,16 @@ export default function Home() {
                 <span className="inline-flex h-11 w-11 items-center justify-center rounded-3xl bg-orange-500 text-white text-lg"><FaMapMarkerAlt /></span>
                 <div>
                   <p className="text-sm uppercase tracking-[0.18em] text-orange-600">Location</p>
-                  <h3 className="text-xl font-semibold text-slate-900">Route, parking & nearby care</h3>
+                  <h3 className="text-xl font-semibold text-slate-900">Location </h3>
                 </div>
               </div>
-              <p className="text-sm text-slate-600 mb-5">Embed a map for route planning, parking details and emergency hospital locations.</p>
+              <p className="text-sm text-slate-600 mb-5">Embed a map for route potemala.</p>
               <div className="rounded-3xl bg-white/90 p-4 border border-orange-100 text-sm text-slate-700">
-                <p className="font-semibold">Near Mandal Hall, Mumbai</p>
-                <p className="mt-2">Parking available nearby. Hospital 2 km away.</p>
+                <p className="font-semibold">Potemala, Navtarun Mitra Mandal</p>
+                <p className="mt-2">Pimpri Pendhar , Potemala.</p>
               </div>
             </div>
-            <div className="glass-card p-6 border-white/30">
-              <div className="mb-4">
-                <p className="text-sm uppercase tracking-[0.18em] text-orange-600">Sponsors</p>
-                <h3 className="text-xl font-semibold text-slate-900">Thank you to our supporters</h3>
-              </div>
-              <div className="space-y-3">
-                {sponsorData.map((sponsor) => (
-                  <div key={sponsor.name} className="rounded-3xl bg-white/95 p-4 border border-orange-100">
-                    <p className="font-semibold text-slate-900">{sponsor.name}</p>
-                    <p className="text-sm text-slate-600">{sponsor.note}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+        
           </div>
         </div>
       </section>

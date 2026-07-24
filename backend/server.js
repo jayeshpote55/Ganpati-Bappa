@@ -26,15 +26,40 @@ const fundRoutes = require("./routes/fundRoutes");
 const app = express();
 const server = http.createServer(app);
 
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000"
+];
+if (process.env.CLIENT_URL) {
+  allowedOrigins.push(process.env.CLIENT_URL.replace(/\/+$/, ""));
+}
 
 const io = new Server(server, {
-  cors: { origin: CLIENT_URL, methods: ["GET", "POST"], credentials: true },
+  cors: { 
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin.replace(/\/+$/, ""))) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    }, 
+    methods: ["GET", "POST"], 
+    credentials: true 
+  },
 });
 
 // ------- Middleware -------
 app.use(helmet({ crossOriginResourcePolicy: false }));
-app.use(cors({ origin: CLIENT_URL, credentials: true }));
+app.use(cors({ 
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin.replace(/\/+$/, ""))) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }, 
+  credentials: true 
+}));
 app.use(compression());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));

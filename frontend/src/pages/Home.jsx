@@ -19,17 +19,17 @@ import {
 
 const eventSchedule = [
   { time: "10:00 AM", title: "Murti Sthapana", label: "Day 1" },
-  { time: "07:00 PM", title: "Bhajan Sandhya", label: "Day 2" },
-  { time: "05:00 PM", title: "Cultural Program", label: "Day 3" },
-  { time: "05:00 PM", title: "Cultural Program", label: "Day 4" },
-  { time: "05:00 PM", title: "Cultural Program", label: "Day 5" },
-  { time: "05:00 PM", title: "Cultural Program", label: "Day 6" },
-  { time: "05:00 PM", title: "Cultural Program", label: "Day 7" },
-  { time: "05:00 PM", title: "Cultural Program", label: "Day 8" },
-  { time: "05:00 PM", title: "Cultural Program", label: "Day 9" },
-  { time: "05:00 PM", title: "Cultural Program", label: "Day 10" },
-  { time: "05:00 PM", title: "Cultural Program", label: "Day 11" },
-  { time: "05:00 PM", title: "Visarjan Procession", label: "Day 12" },
+  { time: "8 Am & 8 PM", title: "Regular Day", label: "Day 2" },
+  { time: "8 Am & 8 PM", title: "Regular Day", label: "Day 3" },
+  { time: "8 Am & 8 PM", title: "Regular Day", label: "Day 4" },
+  { time: "8 Am & 8 PM", title: "Regular Day", label: "Day 5" },
+  { time: "8 Am & 8 PM", title: "Puja & Jagran", label: "Day 6" },
+  { time: "8 Am & 8 PM", title: "Regular Day", label: "Day 7" },
+  { time: "8 Am & 8 PM", title: "Regular Day", label: "Day 8" },
+  { time: "8 Am & 8 PM", title: "Regular Day", label: "Day 9" },
+  { time: "8 Am & 8 PM", title: "Regular Day", label: "Day 10" },
+  { time: "8 Am & 8 PM", title: "Regular Day", label: "Day 11" },
+  { time: "8 Am & 8 PM", title: "Bappa Visarjan", label: "Day 12" },
 ];
 
 const volunteerRoles = [
@@ -44,7 +44,7 @@ const volunteerRoles = [
 ];
 
 const pollingItems = [
-  { question: "Tomorrow meeting timing?", options: ["7 PM", "8 PM", "9 PM"] },
+  { question: "meeting timing?", options: ["7 PM", "8 PM", "9 PM"] },
   { question: "Aarti playlist for today?", options: ["Bappa", "New releases", "Mix"] },
 ];
 
@@ -55,9 +55,9 @@ const sponsorData = [
 ];
 
 const dailyUpdates = [
-  "Today's Program: Ganesh Aarati at 7 AM",
+  "Today's Program: Ganesh Aarati at 8 AM",
   "Volunteers: 32 confirmed",
-  "Expenses: ₹18,400 for decoration",
+  "Expenses: ₹0 for decoration",
   "New gallery upload: 24 photos",
 ];
 
@@ -75,7 +75,7 @@ export default function Home() {
   useEffect(() => {
     api.get("/mandals").then((res) => {
       if (res.data.mandals?.length) setMandal(res.data.mandals[0]);
-    }).catch(() => {});
+    }).catch(() => { });
   }, []);
 
   const nextChaturthi = useMemo(() => {
@@ -159,7 +159,7 @@ export default function Home() {
                   <p className="text-sm text-orange-700 uppercase tracking-[0.2em] mb-2">Latest announcement</p>
                   <p className="font-semibold text-slate-800">सर्वांनी सकाळी नेमके १०:०० वाजता मंदिरापाशी उपस्थित राहावे. आपल्याला बाप्पा आणण्यासाठी प्रस्थान करायचे आहे. कृपया वेळेचे पालन करावे.
 
-गणपती बाप्पा मोरया! 🙏</p>
+                    गणपती बाप्पा मोरया! 🙏</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3 text-sm text-white">
                   <div className="rounded-3xl bg-white/10 p-4">
@@ -418,7 +418,7 @@ export default function Home() {
                 <p className="mt-2">Pimpri Pendhar , Potemala.</p>
               </div>
             </div>
-        
+
           </div>
         </div>
       </section>

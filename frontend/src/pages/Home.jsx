@@ -55,14 +55,20 @@ const sponsorData = [
 ];
 
 const dailyUpdates = [
-  "Today's Program: Ganesh Aarati at 8 AM",
-  "Volunteers: 32 confirmed",
-  "Expenses: ₹0 for decoration",
-  "New gallery upload: 24 photos",
+  "Jayesh Pote: Admin: 7972558521",
+  "Nikhil Pote: Admin: 9561516242",
+  "Aditya Pote: Member: 0000000000",
+  "Vighnesh Pote: Member: 0000000000",
+  "Bhavesh Pote: Member: 0000000000",
+  "Parth Pote: Member: 0000000000",
+  "Raj Pote: Member: 0000000000",
+  "Piyush Pote: Member: 0000000000",
+  "Aryan Pote: Member: 0000000000",
+  "Shubham Pote: Member: 0000000000",
 ];
 
 const emergencyContacts = [
-  "President: 98765 43210",
+  "Admin: 9561516242",
   "Police: 100",
   "Hospital: 108",
   "Ambulance: 102",
@@ -390,8 +396,8 @@ export default function Home() {
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="glass-card p-8 border-white/30">
             <div className="mb-6">
-              <p className="text-sm uppercase tracking-[0.24em] text-orange-600">Daily updates</p>
-              <h3 className="text-3xl font-semibold text-slate-900">Keep everyone in the loop</h3>
+              <p className="text-sm uppercase tracking-[0.24em] text-orange-600">Admin & Memeber</p>
+              <h3 className="text-3xl font-semibold text-slate-900">All decoraters, volunteers</h3>
             </div>
             <div className="space-y-4">
               {dailyUpdates.map((update, idx) => (

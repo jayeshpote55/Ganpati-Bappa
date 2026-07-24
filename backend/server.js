@@ -35,30 +35,30 @@ if (process.env.CLIENT_URL) {
 }
 
 const io = new Server(server, {
-  cors: { 
+  cors: {
     origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin.replace(/\/+$/, ""))) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
       }
-    }, 
-    methods: ["GET", "POST"], 
-    credentials: true 
+    },
+    methods: ["GET", "POST"],
+    credentials: true
   },
 });
 
 // ------- Middleware -------
 app.use(helmet({ crossOriginResourcePolicy: false }));
-app.use(cors({ 
+app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin.replace(/\/+$/, ""))) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
-  }, 
-  credentials: true 
+  },
+  credentials: true
 }));
 app.use(compression());
 app.use(express.json({ limit: "10mb" }));

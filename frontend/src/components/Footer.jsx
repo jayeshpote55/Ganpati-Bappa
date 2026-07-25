@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="bg-maroon-700 text-orange-100 mt-16">
       <div className="max-w-7xl mx-auto px-6 py-8 text-center">
         <div className="flex items-center justify-center gap-2 text-xl font-display font-bold text-white mb-2">
-          <span>🐘</span> Ganesh Mitra Mandal Platform
+          <span>🕉️</span> Navtarun Mitra Mandal 2026
         </div>
         <p className="text-sm text-orange-200">Ganpati Bappa Morya! Mangal Murti Morya! 🙏</p>
         <p className="text-xs text-orange-300 mt-4">

@@ -145,7 +145,7 @@ export default function Home() {
             <div className="glass-card p-6 shadow-[0_40px_120px_rgba(225,98,9,0.18)] border-white/30">
               <div className="flex items-center justify-between gap-4 mb-6">
                 <div>
-                  <p className="text-sm text-orange-700 uppercase tracking-[0.2em] mb-2">Countdown</p>
+                  <p className="text-sm text-orange-700 uppercase tracking-[0.2em] mb-2">Countdown 14-September-2026</p>
                   <h2 className="text-sm text-orange-700 uppercase tracking-[0.2em] mb-2">Ganesh Chaturthi</h2>
                 </div>
                 <div className="inline-flex rounded-3xl bg-orange-500/15 px-4 py-2 text-orange-100 text-sm font-medium">
@@ -214,6 +214,8 @@ export default function Home() {
             </div>
           </div>
 
+
+
           <div className="space-y-6">
             <div className="glass-card p-6 border-white/30">
               <div className="flex items-center justify-between mb-5">
@@ -226,9 +228,9 @@ export default function Home() {
                 </Link>
               </div>
               {[
-                "Decoration meeting at 4 PM in the hall.",
-                "Donation campaign has reached ₹85,000!",
-                "Volunteer registration closes tomorrow.",
+                "Ganesh Aarti : Daily at 8 AM & 8 PM",
+                "Cultural Program : Daily at 9 PM",
+                "Important : All member should join on your valid email id ",
               ].map((text, idx) => (
                 <div key={idx} className="rounded-3xl bg-white/90 p-4 mb-3 last:mb-0">
                   <p className="text-sm text-slate-700">{text}</p>
@@ -344,17 +346,18 @@ export default function Home() {
               <div className="flex items-center gap-3 mb-5">
                 <span className="inline-flex h-11 w-11 items-center justify-center rounded-3xl bg-maroon-700 text-orange-100 text-lg"><FaBolt /></span>
                 <div>
-                  <p className="text-sm uppercase tracking-[0.18em] text-orange-600">Live & chat</p>
-                  <h3 className="text-xl font-semibold text-slate-900">Stay connected in real time</h3>
+                  <p className="text-sm uppercase tracking-[0.18em] text-orange-600">Ganpati Bappa Morya</p>
+                  <h3 className="text-xl font-semibold text-slate-900">नवतरुण मित्र मंडळाचे मुख्य कार्यकर्ते </h3>
                 </div>
               </div>
-              <p className="text-sm text-slate-600 mb-5">A dedicated platform for group chat channels, urgent announcements and live aarti updates.</p>
+              <p className="text-sm text-slate-600 mb-5">गणपती बाप्पा मोरया | मंगल मूर्ती मोरया</p>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { label: "General" },
-                  { label: "Volunteers" },
-                  { label: "Committee" },
-                  { label: "Emergency" },
+                  { label: "चंद्रकांत पोटे : 937058550" },
+                  { label: "सागर जगताप : 9529286059" },
+                  { label: "शाम पोटे : 8668658292" },
+                  { label: "अनिल बोरहाडे : 9552493902" },
+                  { label: "दीपक बोरहाडे : 7709047171" },
                 ].map((item) => (
                   <div key={item.label} className="rounded-3xl bg-white/90 p-3 text-center text-sm font-medium text-slate-700">{item.label}</div>
                 ))}

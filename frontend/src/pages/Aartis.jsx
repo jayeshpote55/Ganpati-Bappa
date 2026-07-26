@@ -159,8 +159,7 @@ export default function Aartis() {
                 <span>Morning</span>
                 <strong>{mandal?.aartiTimings?.morning || "--"}</strong>
               </div>
-    
-              
+
               <div className="flex items-center justify-between rounded-2xl bg-orange-50 p-3">
                 <span>Night</span>
                 <strong>{mandal?.aartiTimings?.night || "--"}</strong>

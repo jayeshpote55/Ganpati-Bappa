@@ -3,7 +3,7 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { useSocket } from "../context/SocketContext";
 import toast from "react-hot-toast";
-import { FaHeart, FaRegHeart, FaPlus, FaTrash, FaImages } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaPlus, FaTrash, FaImages, FaDownload, FaTimes } from "react-icons/fa";
 
 export default function Gallery() {
   const { user } = useAuth();
@@ -12,6 +12,7 @@ export default function Gallery() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ image: null, caption: "" });
   const [loading, setLoading] = useState(true);
+  const [selectedPhoto, setSelectedPhoto] = useState(null); // NEW: currently opened photo
 
   const load = () => api.get("/gallery").then((res) => setPhotos(res.data.photos)).finally(() => setLoading(false));
 
@@ -33,6 +34,15 @@ export default function Gallery() {
       socket.off("photo_like_updated", onLike);
     };
   }, [socket]);
+
+  // NEW: close modal on Escape key press
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setSelectedPhoto(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -68,8 +78,29 @@ export default function Gallery() {
     try {
       await api.delete(`/gallery/${id}`);
       toast.success("Photo removed");
+      setSelectedPhoto(null); // close modal if the deleted photo was open
     } catch {
       toast.error("Failed to delete");
+    }
+  };
+
+  // NEW: download handler — fetches the image as a blob so it saves instead of opening in a new tab
+  const handleDownload = async (photo) => {
+    try {
+      const res = await fetch(photo.imageUrl, { mode: "cors" });
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      const ext = blob.type.split("/")[1] || "jpg";
+      link.download = `${photo.caption ? photo.caption.replace(/\s+/g, "_") : "photo"}.${ext}`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      // Fallback: if fetching as blob fails (e.g. CORS), just open the image in a new tab
+      window.open(photo.imageUrl, "_blank");
     }
   };
 
@@ -117,8 +148,16 @@ export default function Gallery() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {photos.map((photo) => (
             <div key={photo._id} className="card overflow-hidden group">
-              <div className="relative aspect-square bg-orange-100 overflow-hidden">
-                <img src={photo.imageUrl} alt={photo.caption} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => (e.target.src = "https://placehold.co/400x400/f97316/ffffff?text=🐘")} />
+              <div
+                className="relative aspect-square bg-orange-100 overflow-hidden cursor-pointer"
+                onClick={() => setSelectedPhoto(photo)}
+              >
+                <img
+                  src={photo.imageUrl}
+                  alt={photo.caption}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => (e.target.src = "https://placehold.co/400x400/f97316/ffffff?text=🐘")}
+                />
               </div>
               <div className="p-4">
                 {photo.caption && <p className="text-sm text-gray-700 mb-2 truncate">{photo.caption}</p>}
@@ -127,13 +166,78 @@ export default function Gallery() {
                     {isLiked(photo) ? <FaHeart className="text-red-500" /> : <FaRegHeart className="text-gray-400" />}
                     <span className="text-gray-500">{photo.likes?.length || 0}</span>
                   </button>
-                  <button onClick={() => handleDelete(photo._id)} className="text-gray-300 hover:text-red-500">
-                    <FaTrash size={13} />
-                  </button>
+                  <div className="flex items-center gap-3">
+                    {/* NEW: quick download button on the card itself */}
+                    <button
+                      onClick={() => handleDownload(photo)}
+                      className="text-gray-300 hover:text-orange-500"
+                      title="Download"
+                    >
+                      <FaDownload size={13} />
+                    </button>
+                    <button onClick={() => handleDelete(photo._id)} className="text-gray-300 hover:text-red-500">
+                      <FaTrash size={13} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* NEW: Lightbox / modal for viewing a photo full-size */}
+      {selectedPhoto && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setSelectedPhoto(null)}
+        >
+          <div
+            className="relative max-w-3xl w-full bg-white rounded-xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside the modal
+          >
+            <button
+              onClick={() => setSelectedPhoto(null)}
+              className="absolute top-3 right-3 text-white bg-black/50 hover:bg-black/70 rounded-full p-2 z-10"
+            >
+              <FaTimes />
+            </button>
+
+            <img
+              src={selectedPhoto.imageUrl}
+              alt={selectedPhoto.caption}
+              className="w-full max-h-[75vh] object-contain bg-black"
+              onError={(e) => (e.target.src = "https://placehold.co/400x400/f97316/ffffff?text=🐘")}
+            />
+
+            <div className="p-4 flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                {selectedPhoto.caption && (
+                  <p className="text-sm text-gray-700 truncate">{selectedPhoto.caption}</p>
+                )}
+                <button onClick={() => handleLike(selectedPhoto._id)} className="flex items-center gap-1.5 text-sm mt-1">
+                  {isLiked(selectedPhoto) ? <FaHeart className="text-red-500" /> : <FaRegHeart className="text-gray-400" />}
+                  <span className="text-gray-500">{selectedPhoto.likes?.length || 0}</span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0">
+                <button
+                  onClick={() => handleDownload(selectedPhoto)}
+                  className="btn-primary flex items-center gap-2"
+                >
+                  <FaDownload /> Download
+                </button>
+                <button
+                  onClick={() => handleDelete(selectedPhoto._id)}
+                  className="text-gray-400 hover:text-red-500"
+                  title="Delete"
+                >
+                  <FaTrash size={16} />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

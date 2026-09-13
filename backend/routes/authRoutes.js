@@ -7,6 +7,7 @@ const { protect, authorize } = require("../middleware/auth");
 const {
   register,
   login,
+  quickLogin,
   getMe,
   updateMe,
   updateAvatar,
@@ -41,6 +42,7 @@ const upload = multer({ storage, fileFilter });
 
 router.post("/register", register);
 router.post("/login", login);
+router.post("/quick-login", quickLogin);
 router.get("/me", protect, getMe);
 router.put("/me", protect, updateMe);
 router.put("/me/avatar", protect, upload.single("avatar"), updateAvatar);

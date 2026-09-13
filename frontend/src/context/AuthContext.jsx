@@ -47,6 +47,15 @@ export function AuthProvider({ children }) {
     return res.data.user;
   };
 
+  const quickLogin = async (name) => {
+    const res = await api.post("/auth/quick-login", { name });
+    localStorage.setItem("bappa_token", res.data.token);
+    localStorage.setItem("bappa_user", JSON.stringify(res.data.user));
+    setUser(res.data.user);
+    toast.success(res.data.message || `Welcome, ${res.data.user.name}! 🙏`);
+    return res.data.user;
+  };
+
   const logout = () => {
     localStorage.removeItem("bappa_token");
     localStorage.removeItem("bappa_user");
@@ -60,7 +69,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, login, register, quickLogin, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

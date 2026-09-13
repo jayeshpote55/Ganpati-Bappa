@@ -5,12 +5,14 @@ import toast from "react-hot-toast";
 import { FaUser, FaEnvelope, FaLock, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 
 export default function Register() {
-  const { register } = useAuth();
+  const { register, quickLogin } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "", email: "", phone: "", password: "", city: "", address: "",
   });
   const [loading, setLoading] = useState(false);
+  const [quickName, setQuickName] = useState("");
+  const [quickLoading, setQuickLoading] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -36,13 +38,57 @@ export default function Register() {
     }
   };
 
+  const handleQuickSubmit = async (e) => {
+    e.preventDefault();
+    if (!quickName.trim()) {
+      toast.error("कृपया तुमचे नाव टाका");
+      return;
+    }
+    setQuickLoading(true);
+    try {
+      await quickLogin(quickName.trim());
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Quick entry failed");
+    } finally {
+      setQuickLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-[85vh] flex items-center justify-center bg-orange-50 mandala-pattern px-4 py-12">
-      <div className="card w-full max-w-md p-8 animate-slide-up bg-white/95 shadow-xl shadow-orange-200">
-        <div className="text-center mb-6">
+      <div className="card w-full max-w-md p-8 animate-slide-up bg-white/95 shadow-xl shadow-orange-200 space-y-6">
+        <div className="text-center">
           <div className="text-5xl mb-2">🙏</div>
           <h1 className="font-display text-2xl font-bold text-maroon-700">Join the Mandal</h1>
           <p className="text-gray-500 text-sm mt-1">Create your member account</p>
+        </div>
+
+        {/* Quick Name Entry Option */}
+        <div className="rounded-2xl bg-orange-100/70 p-4 border border-orange-200 text-center space-y-2">
+          <p className="text-xs font-semibold text-orange-800">⚡ रजिस्ट्रेशन न करता फक्त नाव टाकून ॲप उघडा</p>
+          <form onSubmit={handleQuickSubmit} className="flex gap-2">
+            <input
+              type="text"
+              placeholder="तुमचे नाव (Enter Name)..."
+              value={quickName}
+              onChange={(e) => setQuickName(e.target.value)}
+              className="w-full bg-white text-xs text-slate-800 px-3 py-2 rounded-xl outline-none border border-orange-300 focus:border-orange-500"
+            />
+            <button
+              type="submit"
+              disabled={quickLoading}
+              className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3 py-2 rounded-xl shrink-0 disabled:opacity-50"
+            >
+              {quickLoading ? "..." : "प्रवेश करा"}
+            </button>
+          </form>
+        </div>
+
+        <div className="relative flex py-1 items-center">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="flex-shrink mx-3 text-xs text-gray-400 uppercase font-medium">किंवा संपूर्ण फॉर्म भरा</span>
+          <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -113,7 +159,7 @@ export default function Register() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500">
           Already a member?{" "}
           <Link to="/login" className="text-orange-600 font-semibold hover:underline">
             Login here

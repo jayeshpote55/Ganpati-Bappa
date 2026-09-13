@@ -53,6 +53,55 @@ exports.register = async (req, res) => {
   }
 };
 
+// @desc  Quick login/entry with name only (no registration required)
+// @route POST /api/auth/quick-login
+exports.quickLogin = async (req, res) => {
+  try {
+    const { name } = req.body;
+    const cleanName = (name || "").trim();
+
+    if (!cleanName) {
+      return res.status(400).json({ success: false, message: "कृपया तुमचे नाव प्रविष्ट करा (Please enter your name)" });
+    }
+
+    let mandal = await Mandal.findOne();
+
+    // Check if a quick user with this exact name already exists, or create a new user
+    let user = await User.findOne({ name: new RegExp(`^${cleanName}$`, "i") });
+
+    if (!user) {
+      const timeStamp = Date.now();
+      const randomId = Math.floor(1000 + Math.random() * 9000);
+      const generatedEmail = `guest_${timeStamp}_${randomId}@mandal.app`;
+      const generatedPhone = `98${Math.floor(10000000 + Math.random() * 89999999)}`;
+      const generatedPassword = `quick_${timeStamp}_${randomId}`;
+
+      user = await User.create({
+        name: cleanName,
+        email: generatedEmail,
+        phone: generatedPhone,
+        password: generatedPassword,
+        mandal: mandal ? mandal._id : undefined,
+        role: "member",
+      });
+    } else {
+      user.lastSeen = new Date();
+      await user.save();
+    }
+
+    const token = signToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      message: `स्वागत आहे, ${user.name}! 🌺`,
+      token,
+      user: user.toSafeObject(),
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // @desc  Login member
 // @route POST /api/auth/login
 exports.login = async (req, res) => {

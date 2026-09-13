@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 import {
   FaUsers,
   FaCalendarAlt,
@@ -75,8 +77,29 @@ const emergencyContacts = [
 ];
 
 export default function Home() {
+  const { user, quickLogin } = useAuth();
+  const navigate = useNavigate();
   const [mandal, setMandal] = useState(null);
   const [countdown, setCountdown] = useState({ days: "--", hours: "--", minutes: "--", seconds: "--" });
+  const [quickName, setQuickName] = useState("");
+  const [quickLoading, setQuickLoading] = useState(false);
+
+  const handleQuickEntry = async (e) => {
+    e.preventDefault();
+    if (!quickName.trim()) {
+      toast.error("कृपया तुमचे नाव प्रविष्ट करा");
+      return;
+    }
+    setQuickLoading(true);
+    try {
+      await quickLogin(quickName.trim());
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "प्रवेश अयशस्वी");
+    } finally {
+      setQuickLoading(false);
+    }
+  };
 
   useEffect(() => {
     api.get("/mandals").then((res) => {
@@ -133,12 +156,51 @@ export default function Home() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <Link to="/register" className="btn-primary text-base inline-flex justify-center">
-                  Join Mandal Now
+                <Link to="/register" className="btn-primary text-base inline-flex justify-center items-center gap-2">
+                  <span>🚩</span> Join Mandal Now
                 </Link>
-                <Link to="/login" className="btn-secondary text-base inline-flex justify-center">
-                  Member Login
+                <Link to="/login" className="btn-secondary text-base inline-flex justify-center items-center gap-2">
+                  <span>🔐</span> Member Login
                 </Link>
+              </div>
+
+              {/* Express Quick Direct Entry Box */}
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-5 border border-white/30 shadow-2xl space-y-3">
+                <div className="flex items-center gap-2 text-white font-semibold text-base sm:text-lg">
+                  <span className="text-2xl">⚡</span>
+                  <span>रजिस्ट्रेशन न करता थेट ॲप उघडा (Quick Open App)</span>
+                </div>
+                <p className="text-xs sm:text-sm text-orange-100/90">
+                  रजिस्टर किंवा लॉगिन करायची गरज नाही! फक्त तुमचे नाव टाका आणि थेट ॲप उघडा.
+                </p>
+                {user ? (
+                  <div className="flex items-center justify-between bg-white/25 backdrop-blur px-4 py-3 rounded-2xl text-white">
+                    <span className="text-sm font-semibold">तुम्ही '{user.name}' म्हणून लॉग इन आहात</span>
+                    <button
+                      onClick={() => navigate("/dashboard")}
+                      className="bg-gold-500 hover:bg-gold-400 text-maroon-800 text-xs sm:text-sm font-bold px-4 py-2 rounded-xl transition shadow-md"
+                    >
+                      Dashboard उघडा →
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleQuickEntry} className="flex flex-col sm:flex-row gap-2.5 pt-1">
+                    <input
+                      type="text"
+                      placeholder="तुमचे नाव प्रविष्ट करा (Enter Name)..."
+                      value={quickName}
+                      onChange={(e) => setQuickName(e.target.value)}
+                      className="flex-1 bg-white/95 text-slate-800 placeholder:text-slate-500 text-sm px-4 py-3 rounded-2xl outline-none focus:ring-2 focus:ring-orange-400 font-medium"
+                    />
+                    <button
+                      type="submit"
+                      disabled={quickLoading}
+                      className="bg-gold-500 hover:bg-gold-400 active:scale-95 text-maroon-800 font-extrabold px-6 py-3 rounded-2xl text-sm transition-all shadow-lg shrink-0 disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                      {quickLoading ? "उघडत आहे..." : "🚀 ॲप उघडा (Open App)"}
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
 

@@ -36,7 +36,7 @@ export default function Login() {
       await quickLogin(quickName.trim());
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Quick entry failed");
+      toast.error(err.response?.data?.message || "प्रवेश अयशस्वी", { duration: 5000 });
     } finally {
       setQuickLoading(false);
     }
@@ -56,7 +56,7 @@ export default function Login() {
 
         {/* Quick Name Entry Option */}
         <div className="rounded-2xl bg-orange-100/70 p-4 border border-orange-200 text-center space-y-2">
-          <p className="text-xs font-semibold text-orange-800">⚡ रजिस्ट्रेशन न करता फक्त नाव टाकून ॲप उघडा</p>
+          <p className="text-xs font-semibold text-orange-800">⚡ नाव टाकून थेट प्रवेश (नोंदणीकृत सदस्यांसाठी)</p>
           <form onSubmit={handleQuickSubmit} className="flex gap-2">
             <input
               type="text"

@@ -53,7 +53,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// @desc  Quick login/entry with name only (no registration required)
+// @desc  Quick login/entry with name only (for previously registered members)
 // @route POST /api/auth/quick-login
 exports.quickLogin = async (req, res) => {
   try {
@@ -64,30 +64,19 @@ exports.quickLogin = async (req, res) => {
       return res.status(400).json({ success: false, message: "कृपया तुमचे नाव प्रविष्ट करा (Please enter your name)" });
     }
 
-    let mandal = await Mandal.findOne();
-
-    // Check if a quick user with this exact name already exists, or create a new user
-    let user = await User.findOne({ name: new RegExp(`^${cleanName}$`, "i") });
+    const escapedName = cleanName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const user = await User.findOne({ name: new RegExp(`^${escapedName}$`, "i") });
 
     if (!user) {
-      const timeStamp = Date.now();
-      const randomId = Math.floor(1000 + Math.random() * 9000);
-      const generatedEmail = `guest_${timeStamp}_${randomId}@mandal.app`;
-      const generatedPhone = `98${Math.floor(10000000 + Math.random() * 89999999)}`;
-      const generatedPassword = `quick_${timeStamp}_${randomId}`;
-
-      user = await User.create({
-        name: cleanName,
-        email: generatedEmail,
-        phone: generatedPhone,
-        password: generatedPassword,
-        mandal: mandal ? mandal._id : undefined,
-        role: "member",
+      return res.status(404).json({
+        success: false,
+        requiresRegistration: true,
+        message: `'${cleanName}' हे नाव नोंदणीकृत नाही. ⚠️ कृपया आधी 'Join Mandal' वर क्लिक करून रजिस्टर करा!`,
       });
-    } else {
-      user.lastSeen = new Date();
-      await user.save();
     }
+
+    user.lastSeen = new Date();
+    await user.save();
 
     const token = signToken(user._id);
 

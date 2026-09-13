@@ -95,7 +95,8 @@ export default function Home() {
       await quickLogin(quickName.trim());
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err.response?.data?.message || "प्रवेश अयशस्वी");
+      const msg = err.response?.data?.message || "प्रवेश अयशस्वी (Entry failed)";
+      toast.error(msg, { duration: 5000 });
     } finally {
       setQuickLoading(false);
     }
@@ -168,10 +169,10 @@ export default function Home() {
               <div className="bg-white/20 backdrop-blur-md rounded-3xl p-5 border border-white/30 shadow-2xl space-y-3">
                 <div className="flex items-center gap-2 text-white font-semibold text-base sm:text-lg">
                   <span className="text-2xl">⚡</span>
-                  <span>रजिस्ट्रेशन न करता थेट ॲप उघडा (Quick Open App)</span>
+                  <span>नोंदणीकृत सदस्यांसाठी थेट ॲप उघडा (Quick Open App)</span>
                 </div>
                 <p className="text-xs sm:text-sm text-orange-100/90">
-                  रजिस्टर किंवा लॉगिन करायची गरज नाही! फक्त तुमचे नाव टाका आणि थेट ॲप उघडा.
+                  ज्यांनी आधी १ वेळा रजिस्टर केले आहे ते फक्त नाव टाकून ॲप उघडू शकतात. (नवीन असाल तर आधी Join Mandal करा).
                 </p>
                 {user ? (
                   <div className="flex items-center justify-between bg-white/25 backdrop-blur px-4 py-3 rounded-2xl text-white">

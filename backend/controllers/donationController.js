@@ -21,6 +21,8 @@ exports.createDonation = async (req, res) => {
       receivedBy: req.user._id,
     });
 
+    await donation.populate("mandal", "name");
+
     const totalAgg = await Donation.aggregate([
       { $match: { mandal: req.user.mandal, status: "confirmed" } },
       { $group: { _id: null, total: { $sum: "$amount" } } },
@@ -113,6 +115,8 @@ exports.verifyRazorpayPayment = async (req, res) => {
       status: "confirmed",
     });
 
+    await donation.populate("mandal", "name");
+
     const totalAgg = await Donation.aggregate([
       { $match: { mandal: req.user.mandal, status: "confirmed" } },
       { $group: { _id: null, total: { $sum: "$amount" } } },
@@ -131,7 +135,7 @@ exports.verifyRazorpayPayment = async (req, res) => {
 
 exports.getDonations = async (req, res) => {
   try {
-    const donations = await Donation.find({ mandal: req.user.mandal }).sort({ createdAt: -1 });
+    const donations = await Donation.find({ mandal: req.user.mandal }).populate("mandal", "name").sort({ createdAt: -1 });
     const totalAgg = await Donation.aggregate([
       { $match: { mandal: req.user.mandal, status: "confirmed" } },
       { $group: { _id: null, total: { $sum: "$amount" } } },

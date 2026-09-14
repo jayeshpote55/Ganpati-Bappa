@@ -5,8 +5,9 @@ import api from "../api/axios";
 import CountdownTimer from "../components/CountdownTimer";
 import LiveDonationTicker from "../components/LiveDonationTicker";
 import { Link } from "react-router-dom";
-import { FaUsers, FaCalendarAlt, FaBullhorn, FaImages, FaCrown, FaRupeeSign, FaPray, FaTrash } from "react-icons/fa";
+import { FaUsers, FaCalendarAlt, FaBullhorn, FaImages, FaCrown, FaRupeeSign, FaPray, FaTrash, FaBookOpen } from "react-icons/fa";
 import toast from "react-hot-toast";
+import AartiReaderModal from "../components/AartiReaderModal";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -23,6 +24,7 @@ export default function Dashboard() {
   const [savingAarti, setSavingAarti] = useState(false);
   const [savingFund, setSavingFund] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedAarti, setSelectedAarti] = useState(null);
   const isAdmin = user?.role === "admin" || user?.role === "committee";
 
   const mandalId = typeof user?.mandal === "object" ? user?.mandal?._id : user?.mandal;
@@ -330,18 +332,33 @@ export default function Dashboard() {
               ) : (
                 <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
                   {mandal.aartiCollection.map((item) => (
-                    <div key={item._id} className="bg-orange-50 rounded-xl p-4">
+                    <div
+                      key={item._id}
+                      onClick={() => setSelectedAarti(item)}
+                      className="bg-orange-50 hover:bg-orange-100/80 border border-orange-100 hover:border-orange-300 rounded-xl p-4 cursor-pointer transition-all shadow-sm group"
+                    >
                       <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="font-semibold text-gray-800">{item.title}</p>
-                          <p className="text-xs text-gray-500 mt-1">{item.lyrics?.slice(0, 90) || "Lyrics not added."}</p>
+                        <div className="flex-1">
+                          <p className="font-bold text-gray-800 group-hover:text-orange-700 flex items-center gap-1.5 transition">
+                            <span>🌺</span> {item.title}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                            {item.lyrics || "वाचनासाठी आणि ऐकण्यासाठी क्लिक करा 📖"}
+                          </p>
+                          <span className="inline-flex items-center gap-1 text-[11px] text-orange-600 font-semibold mt-2 bg-orange-100 px-2.5 py-0.5 rounded-md">
+                            <FaBookOpen /> आरती वाचा / ऐका 📖
+                          </span>
                         </div>
                         {isAdmin && (
                           <button
-                            onClick={() => handleDeleteAarti(item._id)}
-                            className="inline-flex items-center gap-2 text-red-600 text-xs font-semibold"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteAarti(item._id);
+                            }}
+                            className="inline-flex items-center gap-1 text-red-600 text-xs font-semibold p-1 hover:bg-red-50 rounded"
+                            title="Delete Aarti"
                           >
-                            <FaTrash /> Delete
+                            <FaTrash />
                           </button>
                         )}
                       </div>
@@ -464,6 +481,8 @@ export default function Dashboard() {
           </Link>
         </div>
       </div>
+
+      <AartiReaderModal aarti={selectedAarti} onClose={() => setSelectedAarti(null)} />
     </div>
   );
 }

@@ -4,6 +4,8 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { useSocket } from "../context/SocketContext";
 import toast from "react-hot-toast";
+import { FaBookOpen, FaTrash, FaMusic, FaFilePdf, FaVolumeUp } from "react-icons/fa";
+import AartiReaderModal from "../components/AartiReaderModal";
 
 export default function Aartis() {
   const { user } = useAuth();
@@ -11,6 +13,7 @@ export default function Aartis() {
   const [mandal, setMandal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [selectedAarti, setSelectedAarti] = useState(null);
   const [form, setForm] = useState({ title: "", lyrics: "", audioUrl: "", pdfUrl: "" });
   const isAdmin = user?.role === "admin" || user?.role === "committee";
   const mandalId = typeof user?.mandal === "object" ? user?.mandal?._id : user?.mandal;
@@ -110,13 +113,24 @@ export default function Aartis() {
             ) : (
               <div className="space-y-4">
                 {mandal.aartiCollection.map((aarti) => (
-                  <div key={aarti._id} className="rounded-3xl border border-orange-100 bg-orange-50 p-5">
+                  <div
+                    key={aarti._id}
+                    className="rounded-3xl border border-orange-100 bg-orange-50 p-5 hover:border-orange-300 transition-all shadow-sm"
+                  >
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">{aarti.title}</h3>
+                        <h3 className="font-bold text-gray-900 text-lg flex items-center gap-2">
+                          <span>🌺</span> {aarti.title}
+                        </h3>
                         <p className="text-xs text-gray-500 mt-1">Lyrics and reference links</p>
                       </div>
                       <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => setSelectedAarti(aarti)}
+                          className="badge bg-orange-600 text-white font-bold hover:bg-orange-700 cursor-pointer transition flex items-center gap-1"
+                        >
+                          <FaBookOpen /> पूर्ण आरती वाचा 📖
+                        </button>
                         {aarti.audioUrl && (
                           <a href={aarti.audioUrl} target="_blank" rel="noreferrer" className="badge bg-amber-100 text-amber-700">
                             Play audio
@@ -130,20 +144,27 @@ export default function Aartis() {
                       </div>
                     </div>
 
-                    <div className="mt-4 whitespace-pre-line text-sm leading-7 text-gray-700">
+                    <div className="mt-4 whitespace-pre-line text-sm leading-7 text-gray-700 line-clamp-4">
                       {aarti.lyrics || "Lyrics not added for this Aarti."}
                     </div>
 
-                    {isAdmin && (
-                      <div className="mt-4 flex justify-end">
+                    <div className="mt-4 flex items-center justify-between border-t border-orange-200/60 pt-3">
+                      <button
+                        onClick={() => setSelectedAarti(aarti)}
+                        className="text-xs font-bold text-orange-600 hover:text-orange-800 flex items-center gap-1"
+                      >
+                        <FaBookOpen /> मोठ्या अक्षरात वाचा / वाचन ऐका (Full Reader View) →
+                      </button>
+
+                      {isAdmin && (
                         <button
                           onClick={() => handleDelete(aarti._id)}
-                          className="btn-secondary text-red-600 border-red-200 hover:bg-red-50"
+                          className="btn-secondary text-red-600 border-red-200 hover:bg-red-50 text-xs py-1 px-3"
                         >
                           Delete Aarti
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -209,6 +230,8 @@ export default function Aartis() {
           </div>
         </aside>
       </div>
+
+      <AartiReaderModal aarti={selectedAarti} onClose={() => setSelectedAarti(null)} />
     </div>
   );
 }

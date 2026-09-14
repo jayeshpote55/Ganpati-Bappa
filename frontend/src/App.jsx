@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NotificationListener from "./components/NotificationListener";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -24,6 +25,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-orange-50/30">
       <Toaster position="top-right" toastOptions={{ style: { borderRadius: "12px", fontWeight: 500 } }} />
+      <NotificationListener />
       <Navbar />
       <main className="flex-1">
         <Routes>

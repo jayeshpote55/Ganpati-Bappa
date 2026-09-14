@@ -119,6 +119,7 @@ exports.addAarti = async (req, res) => {
     await mandal.save();
 
     emitToMandal(mandal._id.toString(), "mandal_updated", mandal);
+    emitToMandal(mandal._id.toString(), "new_aarti", newAarti);
     res.status(201).json({ success: true, message: "Aarti added.", aarti: newAarti, mandal });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

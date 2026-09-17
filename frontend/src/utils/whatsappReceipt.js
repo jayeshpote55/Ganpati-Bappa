@@ -53,6 +53,11 @@ export function generateMarathiReceiptText(donation, defaultMandalName = "श्
   const modeInMarathi = getPaymentModeInMarathi(donation.paymentMode);
   const receiptId = donation._id ? donation._id.slice(-6).toUpperCase() : donation.transactionId || "GEN-" + Date.now().toString().slice(-6);
 
+  const collectorName =
+    typeof donation.receivedBy === "object" && donation.receivedBy?.name
+      ? donation.receivedBy.name
+      : donation.receivedByName || "";
+
   let text = `🚩 *${mandalName}* 🚩\n`;
   text += `🙏 *गणेशोत्सव वर्गणी पावती (Vargani Receipt)* 🙏\n\n`;
   text += `🗓 *दिनांक (Date):* ${formattedDate}\n`;
@@ -60,6 +65,10 @@ export function generateMarathiReceiptText(donation, defaultMandalName = "श्
   text += `📱 *व्हॉट्सॲप (WhatsApp):* ${donorPhone}\n`;
   text += `💰 *वर्गणी रक्कम (Amount):* ₹${amount}/-\n`;
   text += `💳 *देणगी माध्यम (Mode):* ${modeInMarathi}\n`;
+
+  if (collectorName) {
+    text += `✍️ *पावती देणारे (Issued By):* ${collectorName}\n`;
+  }
 
   if (donation.message) {
     text += `💬 *संदेश:* ${donation.message}\n`;

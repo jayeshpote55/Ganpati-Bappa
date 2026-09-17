@@ -7,6 +7,8 @@ const {
   getLeaderboard,
   createRazorpayOrder,
   verifyRazorpayPayment,
+  updateDonation,
+  deleteDonation,
 } = require("../controllers/donationController");
 
 router.use(protect);
@@ -15,5 +17,8 @@ router.post("/razorpay/order", createRazorpayOrder);
 router.post("/razorpay/verify", verifyRazorpayPayment);
 router.get("/", getDonations);
 router.get("/leaderboard", getLeaderboard);
+router.put("/:id", updateDonation);
+router.delete("/:id", deleteDonation);
 
 module.exports = router;
+

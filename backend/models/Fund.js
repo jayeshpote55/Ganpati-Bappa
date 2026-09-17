@@ -12,6 +12,19 @@ const fundSchema = new mongoose.Schema(
       enum: ["income", "expense"],
       default: "expense",
     },
+    category: {
+      type: String,
+      enum: [
+        "Decoration",
+        "Puja & Prasad",
+        "Sound & Light",
+        "Miravanuk & Visarjan",
+        "Cultural & Program",
+        "Social Service",
+        "General",
+      ],
+      default: "General",
+    },
     paymentMode: {
       type: String,
       enum: ["cash", "upi", "bank_transfer", "cheque", "card", "other"],
